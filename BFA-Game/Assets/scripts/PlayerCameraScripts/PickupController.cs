@@ -12,6 +12,7 @@ public class PickupController : MonoBehaviour
     [Header("Physics Parameters")]
     [SerializeField] private float pickupRange = 5.0f;
     [SerializeField] private float pickupForce = 150.0f;
+    
 
     [Header("Distance Control")]
     [SerializeField] private float minDistance = 1.0f;
