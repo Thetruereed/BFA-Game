@@ -996,8 +996,8 @@ MonoBehaviour:
   bobbingAmount: 0.1
   bobbingSpeed: 5
   bobbingMaxHeight: 0.5
-  bobbingIdleSpeed: 3
-  bobbingCrouchSpeed: 5
+  bobbingIdleSpeed: 0
+  bobbingCrouchSpeed: 0
   cameraHeight: 0.5
   crouchHeight: 0.2
   standingHeight: 1.7

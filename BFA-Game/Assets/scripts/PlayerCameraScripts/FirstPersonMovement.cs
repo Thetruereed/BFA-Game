@@ -166,7 +166,7 @@ public class FirstPersonMovement : MonoBehaviour
     private void HandleHeadBobbing()
     {
         // Calculate head bob movement based on the character's movement speed
-        float speedMultiplier = (isMoving || isCrouching) ? (isSprinting ? bobbingSpeed * sprintSpeedMultiplier : bobbingSpeed) : (isCrouching ? bobbingCrouchSpeed : bobbingIdleSpeed);
+        float speedMultiplier = isMoving ? (isSprinting ? bobbingSpeed * sprintSpeedMultiplier : (isCrouching ? bobbingCrouchSpeed : bobbingSpeed)) : bobbingIdleSpeed;
         float waveslice = Mathf.Sin(headBobTimer);
         headBobTimer += speedMultiplier * Time.deltaTime;
         if (headBobTimer > Mathf.PI * 2)
