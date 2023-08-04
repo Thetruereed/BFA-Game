@@ -148,11 +148,18 @@ public class FirstPersonMovement : MonoBehaviour
             isCrouching = true;
         }
         else
-        {
-            // Smoothly transition the camera position when standing up from crouch
-            playerCamera.transform.localPosition = Vector3.Lerp(playerCamera.transform.localPosition, standingCameraPos, crouchTransitionSpeed * Time.deltaTime);
-            characterController.height = Mathf.Lerp(characterController.height, standingHeight, crouchTransitionSpeed * Time.deltaTime);
-            isCrouching = false;
+        {  
+            // Check if there is enough space above the player to stand up
+            RaycastHit hit;
+            Vector3 raycastOrigin = transform.position + characterController.center;
+            bool canStandUp = !Physics.Raycast(raycastOrigin, Vector3.up, out hit, standingHeight - crouchHeight, ~LayerMask.GetMask("Player"));
+            if (canStandUp)
+            {
+                // Smoothly transition the camera position when standing up from crouch
+                playerCamera.transform.localPosition = Vector3.Lerp(playerCamera.transform.localPosition, standingCameraPos, crouchTransitionSpeed * Time.deltaTime);
+                characterController.height = Mathf.Lerp(characterController.height, standingHeight, crouchTransitionSpeed * Time.deltaTime);
+                isCrouching = false;
+            }
         }
     }
 
