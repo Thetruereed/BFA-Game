@@ -9,10 +9,15 @@ public class PickupController : MonoBehaviour
     private GameObject heldobj;
     private Rigidbody heldobjRB;
 
-
     [Header("Physics Parameters")]
     [SerializeField] private float pickupRange = 5.0f;
     [SerializeField] private float pickupForce = 150.0f;
+
+    [Header("Distance Control")]
+    [SerializeField] private float minDistance = 1.0f;
+    [SerializeField] private float maxDistance = 10.0f;
+    [SerializeField] private float distanceSpeed = 2.0f;
+    private float currentDistance;
 
     private void Update()
     {
@@ -31,9 +36,11 @@ public class PickupController : MonoBehaviour
                 DropObject();
             }
         }
+
         if (heldobj != null)
         {
             MoveObject();
+            ControlDistance();
         }
     }
 
@@ -51,26 +58,36 @@ public class PickupController : MonoBehaviour
         if (pickobj.GetComponent<Rigidbody>())
         {
             heldobjRB = pickobj.GetComponent<Rigidbody>();
-            //turns off gravity for objects so that object does not fall when picked up
+            // Turns off gravity for objects so that object does not fall when picked up
             heldobjRB.useGravity = false;
             heldobjRB.drag = 10f;
-            // freeze rotation of object when picked up
+            // Freeze rotation of object when picked up
             heldobjRB.constraints = RigidbodyConstraints.FreezeRotation;
 
             heldobjRB.transform.parent = holdArea;
             heldobj = pickobj;
+
+            // Calculate initial distance between player and the object
+            currentDistance = Vector3.Distance(transform.position, holdArea.position);
         }
     }
 
     void DropObject()
     {
-        //turns on gravity for objects so that object falls when dropped
+        // Turns on gravity for objects so that object falls when dropped
         heldobjRB.useGravity = true;
         heldobjRB.drag = 1f;
-        // unfreeze rotation of object when dropped
+        // Unfreeze rotation of object when dropped
         heldobjRB.constraints = RigidbodyConstraints.None;
 
         heldobj.transform.parent = null;
         heldobj = null;
+    }
+
+    void ControlDistance()
+    {
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        currentDistance = Mathf.Clamp(currentDistance - scrollInput * distanceSpeed, minDistance, maxDistance);
+        holdArea.position = transform.position + transform.forward * currentDistance;
     }
 }
